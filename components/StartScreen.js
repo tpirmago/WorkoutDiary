@@ -5,12 +5,20 @@ import { ACCENT_COLOR } from '../styles/common';
 import { COLORS } from '../styles/theme';
 import { startScreenStyles as styles } from '../styles/startScreen';
 
+const isValidEmail = (value) => {
+  if (!value.trim()) return true;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+};
+
 export default function StartScreen({ onSubmit }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
 
+  const emailValid = isValidEmail(email);
+  const canSubmit = name.trim() && emailValid;
+
   const handleSubmit = () => {
-    if (name.trim()) onSubmit({ name: name.trim(), email: email.trim() });
+    if (canSubmit) onSubmit({ name: name.trim(), email: email.trim() });
   };
 
   return (
@@ -42,6 +50,7 @@ export default function StartScreen({ onSubmit }) {
         keyboardType="email-address"
         autoCapitalize="none"
         autoCorrect={false}
+        error={!emailValid && email.length > 0}
         style={styles.input}
         outlineColor="transparent"
         activeOutlineColor={ACCENT_COLOR}
@@ -55,7 +64,7 @@ export default function StartScreen({ onSubmit }) {
         onPress={handleSubmit}
         style={styles.button}
         labelStyle={styles.buttonLabel}
-        disabled={!name.trim()}
+        disabled={!canSubmit}
       >
         Get Started
       </Button>
