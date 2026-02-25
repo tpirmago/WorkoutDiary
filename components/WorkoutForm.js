@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { View, Image, StyleSheet, Pressable } from 'react-native';
+import { View, Image, Pressable } from 'react-native';
 import { Text, Menu, Button, TextInput } from 'react-native-paper';
 import { ACCENT_COLOR, FONTS } from '../styles/common';
 import { COLORS } from '../styles/theme';
 import { ICONS, getSportIconSource } from '../assets/icons';
+import { workoutFormStyles as styles } from '../styles/workoutForm';
 
 const PLACEHOLDER_COLOR = '#A8A8A8';
 const LABEL_COLOR = '#1C1C1C';
@@ -27,6 +28,16 @@ export default function WorkoutForm({
   const [duration, setDuration] = useState('');
   const activityInputRef = useRef(null);
   const dateInputRef = useRef(null);
+
+  const handleOpenSportMenu = () => {
+    activityInputRef.current?.focus();
+    setSportMenuVisible(true);
+  };
+
+  const handleOpenCalendar = () => {
+    dateInputRef.current?.focus();
+    onOpenCalendar();
+  };
 
   const handleDistanceChange = (text) => {
     if (text === '') {
@@ -71,7 +82,7 @@ export default function WorkoutForm({
         visible={sportMenuVisible}
         onDismiss={() => setSportMenuVisible(false)}
         anchor={
-          <Pressable onPress={() => { activityInputRef.current?.focus(); setSportMenuVisible(true); }}>
+          <Pressable onPress={handleOpenSportMenu} style={styles.activityPressable}>
             <TextInput
               ref={activityInputRef}
               label="Select Activity"
@@ -79,14 +90,25 @@ export default function WorkoutForm({
               mode="outlined"
               editable={false}
               showSoftInputOnFocus={false}
-              right={<TextInput.Icon icon={() => <Image source={ICONS.arrowDropDown} style={styles.selectRightIcon} resizeMode="contain" />} />}
+              pointerEvents="none"
+              right={(
+                <TextInput.Icon
+                  icon={() => (
+                    <Image
+                      source={ICONS.arrowDropDown}
+                      style={styles.selectRightIcon}
+                      resizeMode="contain"
+                    />
+                  )}
+                  onPress={handleOpenSportMenu}
+                />
+              )}
               style={styles.selectInput}
               outlineColor="transparent"
               activeOutlineColor={COLORS.background}
               theme={inputTheme}
               placeholderTextColor={PLACEHOLDER_COLOR}
               textColor={LABEL_COLOR}
-              pointerEvents="none"
             />
           </Pressable>
         }
@@ -106,7 +128,7 @@ export default function WorkoutForm({
         ))}
       </Menu>
 
-      <Pressable onPress={() => { dateInputRef.current?.focus(); onOpenCalendar(); }}>
+      <Pressable onPress={handleOpenCalendar} style={styles.datePressable}>
         <TextInput
           ref={dateInputRef}
           label="Select Date"
@@ -115,14 +137,25 @@ export default function WorkoutForm({
           mode="outlined"
           editable={false}
           showSoftInputOnFocus={false}
-          right={<TextInput.Icon icon={() => <Image source={ICONS.calendar} style={styles.selectRightIcon} resizeMode="contain" />} />}
+          pointerEvents="none"
+          right={(
+            <TextInput.Icon
+              icon={() => (
+                <Image
+                  source={ICONS.calendar}
+                  style={styles.selectRightIcon}
+                  resizeMode="contain"
+                />
+              )}
+              onPress={handleOpenCalendar}
+            />
+          )}
           style={styles.selectInput}
           outlineColor="transparent"
           activeOutlineColor={COLORS.background}
           theme={inputTheme}
           placeholderTextColor={PLACEHOLDER_COLOR}
           textColor={LABEL_COLOR}
-          pointerEvents="none"
         />
       </Pressable>
 
@@ -166,55 +199,3 @@ export default function WorkoutForm({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: ACCENT_COLOR,
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 16,
-    marginVertical: 12,
-  },
-  cardTitle: {
-    color: COLORS.background,
-    fontFamily: FONTS.semiBold,
-    marginBottom: 12,
-  },
-  selectInput: {
-    backgroundColor: '#ffffff',
-    marginBottom: 10,
-  },
-  selectRightIcon: {
-    width: 24,
-    height: 24,
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 10,
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: '#ffffff',
-  },
-  inputHalf: {
-    flex: 1,
-  },
-  addButton: {
-    backgroundColor: COLORS.background,
-    marginTop: 8,
-    borderRadius: 12,
-  },
-  addButtonLabel: {
-    color: COLORS.text,
-  },
-  menuContent: {
-    backgroundColor: COLORS.surface,
-  },
-  menuItemTitle: {
-    color: COLORS.text,
-  },
-  menuSportIcon: {
-    width: 24,
-    height: 24,
-  },
-});

@@ -6,7 +6,6 @@ export const ICONS = {
   hambMenu: require('./hamb_menu_icon.png'),
   user: require('./user_icon.png'),
   home: require('./home_icon.png'),
-  fab: require('./FAB_icon.png'),
   workouts: require('./workouts_icon.png'),
   calendar: require('./calendar_icon.png'),
   arrowDropDown: require('./arrow_drop_down.png'),

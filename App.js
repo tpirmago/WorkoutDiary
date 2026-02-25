@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react';
-import { View, ScrollView } from 'react-native';
+import React, { useState, useCallback, useRef } from 'react';
+import { View, ScrollView, PanResponder } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useFonts } from '@expo-google-fonts/instrument-sans/useFonts';
 import {
@@ -11,6 +11,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getAppTheme } from './styles/theme';
 import { formatDisplayDate, commonStyles } from './styles/common';
+import { appStyles } from './styles/app';
 import Header from './components/Header';
 import Welcome from './components/Welcome';
 import DrawerMenu from './components/DrawerMenu';
@@ -47,6 +48,21 @@ export default function App() {
   const [calendarVisible, setCalendarVisible] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const drawerOpenRef = useRef(drawerOpen);
+  drawerOpenRef.current = drawerOpen;
+
+  const swipeOpenThreshold = 50;
+  const panResponderOpen = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => !drawerOpenRef.current,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return !drawerOpenRef.current && gestureState.dx > 20;
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx > swipeOpenThreshold) setDrawerOpen(true);
+      },
+    })
+  ).current;
 
   const handleAddExercise = useCallback((exercise) => {
     setExercises((prev) => [...prev, { ...exercise, id: generateId() }]);
@@ -90,6 +106,12 @@ export default function App() {
       <PaperProvider theme={theme}>
         <StatusBar style="light" />
         <View style={commonStyles.screen}>
+          {!drawerOpen && (
+            <View
+              style={appStyles.edgeSwipeStrip}
+              {...panResponderOpen.panHandlers}
+            />
+          )}
           <Header onMenuPress={() => setDrawerOpen(true)} />
           <ScrollView style={commonStyles.screen}>
             <Welcome userName={user?.name} />
@@ -105,7 +127,10 @@ export default function App() {
               onSeeAll={() => setListModalVisible(true)}
             />
           </ScrollView>
-          <BottomNav onFabPress={() => setListModalVisible(true)} />
+          <BottomNav
+            workoutsListVisible={listModalVisible}
+            onFabPress={() => setListModalVisible((prev) => !prev)}
+          />
           <DrawerMenu
             visible={drawerOpen}
             onClose={() => setDrawerOpen(false)}

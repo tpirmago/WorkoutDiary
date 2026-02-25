@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import ExerciseListItem from './ExerciseListItem';
-import { commonStyles, FONTS } from '../styles/common';
-import { COLORS } from '../styles/theme';
+import { commonStyles } from '../styles/common';
+import { workoutsListStyles as styles } from '../styles/workoutsList';
 
 export default function WorkoutsList({ exercises, onSeeAll }) {
   const preview = exercises.slice(0, 5);
@@ -25,15 +25,3 @@ export default function WorkoutsList({ exercises, onSeeAll }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  list: {
-    maxHeight: 320,
-  },
-  empty: {
-    color: COLORS.text,
-    fontFamily: FONTS.regular,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-  },
-});

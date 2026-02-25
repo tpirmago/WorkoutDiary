@@ -1,22 +1,34 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Image, Pressable, PanResponder } from 'react-native';
 import { Drawer } from 'react-native-paper';
-import { FONTS } from '../styles/common';
-import { COLORS } from '../styles/theme';
 import { ICONS } from '../assets/icons';
+import { drawerMenuStyles as styles } from '../styles/drawerMenu';
 
 const MENU_ITEMS = [
-  { key: 'home', icon: 'home', label: 'Home' },
-  { key: 'workouts', icon: 'format-list-bulleted', label: 'Workouts' },
-  { key: 'add', icon: 'plus', label: 'Add Workout' },
-  { key: 'settings', icon: 'cog', label: 'Settings' },
-  { key: 'faq', icon: 'help-circle', label: 'FAQ' },
-  { key: 'bug', icon: 'bug', label: 'Report Bug' },
+  { key: 'home', label: 'Home' },
+  { key: 'workouts', label: 'Workouts' },
+  { key: 'add', label: 'Add Workout' },
+  { key: 'settings', label: 'Settings' },
+  { key: 'faq', label: 'FAQ' },
+  { key: 'bug', label: 'Report Bug' },
 ];
 
+const SWIPE_CLOSE_THRESHOLD = 50;
+
 export default function DrawerMenu({ visible, onClose, onItemPress, onWorkoutsPress, userName }) {
-  if (!visible) return null;
-  const name = userName?.trim() || 'Reima';
+  const name = userName?.trim() || ' ';
+
+  const panResponderClose = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return Math.abs(gestureState.dx) > 15;
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dx < -SWIPE_CLOSE_THRESHOLD) onClose?.();
+      },
+    })
+  ).current;
 
   const handleItemPress = (key) => {
     if (key === 'workouts') onWorkoutsPress?.();
@@ -24,25 +36,35 @@ export default function DrawerMenu({ visible, onClose, onItemPress, onWorkoutsPr
     onClose?.();
   };
 
+  if (!visible) return null;
+
   return (
     <View style={styles.overlay}>
-      <View style={styles.drawer}>
+      <View style={styles.drawer} {...panResponderClose.panHandlers}>
         <View style={styles.header}>
           <View style={styles.avatarWrap}>
             <Image source={ICONS.user} style={styles.avatar} resizeMode="contain" />
           </View>
-          <Text style={styles.name}>{name}</Text>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode="tail">{name}</Text>
         </View>
         <Drawer.Section>
           {MENU_ITEMS.map((item) => (
-            <Drawer.Item
+            <Pressable
               key={item.key}
-              icon={item.icon}
-              label={item.label}
               onPress={() => handleItemPress(item.key)}
-              labelStyle={styles.label}
               style={styles.item}
-            />
+            >
+              {({ pressed }) => (
+                <View style={styles.itemContent}>
+                  <Text
+                    style={[styles.label, pressed && styles.labelPressed]}
+                    numberOfLines={1}
+                  >
+                    {item.label}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
           ))}
         </Drawer.Section>
       </View>
@@ -50,55 +72,3 @@ export default function DrawerMenu({ visible, onClose, onItemPress, onWorkoutsPr
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    flexDirection: 'row',
-    zIndex: 1000,
-  },
-  backdrop: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  drawer: {
-    width: 280,
-    backgroundColor: COLORS.surface,
-    paddingTop: 48,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingBottom: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.surface,
-  },
-  avatarWrap: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    overflow: 'hidden',
-    backgroundColor: COLORS.surface,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-  },
-  name: {
-    fontSize: 18,
-    fontFamily: FONTS.semiBold,
-    color: COLORS.text,
-    marginLeft: 12,
-  },
-  label: {
-    color: COLORS.text,
-  },
-  item: {
-    backgroundColor: 'transparent',
-  },
-});

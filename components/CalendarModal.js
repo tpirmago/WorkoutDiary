@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Modal, Text, StyleSheet } from 'react-native';
+import { View, Modal, Text } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Button } from 'react-native-paper';
 import { ACCENT_COLOR } from '../styles/common';
 import { COLORS } from '../styles/theme';
-import { FONTS } from '../styles/common';
+import { calendarModalStyles as styles } from '../styles/calendarModal';
 
 export default function CalendarModal({ visible, initialDate, onSelect, onCancel }) {
   const [date, setDate] = useState(initialDate || new Date());
@@ -46,32 +46,3 @@ export default function CalendarModal({ visible, initialDate, onSelect, onCancel
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  content: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 24,
-    margin: 24,
-    minWidth: 320,
-  },
-  title: {
-    color: COLORS.text,
-    fontSize: 18,
-    fontFamily: FONTS.medium,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  actions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    gap: 16,
-    marginTop: 16,
-  },
-});

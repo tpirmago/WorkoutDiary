@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, Modal, ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Modal, ScrollView, Text } from 'react-native';
 import { DataTable, Button } from 'react-native-paper';
 import ExerciseListItem from './ExerciseListItem';
+import BottomNav from './BottomNav';
 import { SPORT_OPTIONS } from './WorkoutForm';
 import { ACCENT_COLOR } from '../styles/common';
 import { COLORS } from '../styles/theme';
-import { FONTS } from '../styles/common';
+import { exerciseListModalStyles as styles } from '../styles/exerciseListModal';
+
+console.log('ExerciseListModal render');
 
 function sumBySport(exercises) {
   const bySport = {};
@@ -58,63 +61,8 @@ export default function ExerciseListModal({ visible, onClose, exercises }) {
             )}
           </ScrollView>
         </View>
+        <BottomNav workoutsListVisible onFabPress={onClose} />
       </View>
     </Modal>
   );
 }
-
-const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-  },
-  content: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    marginTop: 60,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingTop: 16,
-    paddingBottom: 24,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  title: {
-    color: COLORS.text,
-    fontSize: 20,
-    fontFamily: FONTS.semiBold,
-  },
-  summarySection: {
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  summaryTitle: {
-    color: COLORS.text,
-    fontSize: 14,
-    fontFamily: FONTS.regular,
-    marginBottom: 8,
-  },
-  tableHeader: {
-    color: COLORS.text,
-  },
-  tableCell: {
-    color: COLORS.text,
-  },
-  tableCellAccent: {
-    color: ACCENT_COLOR,
-    fontFamily: FONTS.medium,
-  },
-  scroll: {
-    flex: 1,
-  },
-  empty: {
-    color: COLORS.text,
-    padding: 24,
-    textAlign: 'center',
-  },
-});

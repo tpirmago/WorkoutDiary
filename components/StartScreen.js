@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, KeyboardAvoidingView, Platform } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { ACCENT_COLOR } from '../styles/common';
 import { COLORS } from '../styles/theme';
-import { FONTS } from '../styles/common';
+import { startScreenStyles as styles } from '../styles/startScreen';
 
 export default function StartScreen({ onSubmit }) {
   const [name, setName] = useState('');
@@ -62,37 +62,3 @@ export default function StartScreen({ onSubmit }) {
     </KeyboardAvoidingView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    backgroundColor: COLORS.background,
-  },
-  greeting: {
-    fontSize: 26,
-    fontFamily: FONTS.semiBold,
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 15,
-    fontFamily: FONTS.regular,
-    color: COLORS.text,
-    marginBottom: 32,
-  },
-  input: {
-    backgroundColor: COLORS.surface,
-    marginBottom: 16,
-    borderRadius: 12,
-  },
-  button: {
-    backgroundColor: ACCENT_COLOR,
-    marginTop: 16,
-  },
-  buttonLabel: {
-    color: COLORS.background,
-    fontFamily: FONTS.semiBold,
-  },
-});

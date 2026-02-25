@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import { COLORS } from '../styles/theme';
 import { ICONS } from '../assets/icons';
+import { headerStyles as styles } from '../styles/header';
 
 export default function Header({ onMenuPress }) {
   return (
@@ -17,35 +17,3 @@ export default function Header({ onMenuPress }) {
     </Appbar.Header>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: COLORS.surface,
-    elevation: 0,
-  },
-  iconButton: {
-    padding: 8,
-    justifyContent: 'center',
-  },
-  headerIcon: {
-    width: 24,
-    height: 24,
-    tintColor: COLORS.text,
-  },
-  title: {
-    color: COLORS.text,
-    fontWeight: '700',
-    fontSize: 18,
-  },
-  avatarWrap: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    overflow: 'hidden',
-    backgroundColor: COLORS.surface,
-  },
-  avatar: {
-    width: 40,
-    height: 40,
-  },
-});

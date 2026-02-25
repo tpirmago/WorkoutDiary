@@ -1,10 +1,9 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { SPORT_OPTIONS } from './WorkoutForm';
-import { formatExerciseDate } from '../styles/common';
-import { commonStyles, FONTS } from '../styles/common';
-import { COLORS } from '../styles/theme';
+import { formatExerciseDate, commonStyles } from '../styles/common';
 import { getSportIconSource } from '../assets/icons';
+import { exerciseListItemStyles as styles } from '../styles/exerciseListItem';
 
 export default function ExerciseListItem({ exercise }) {
   const option = SPORT_OPTIONS.find((s) => s.label === exercise.sportType) || SPORT_OPTIONS.find((s) => s.key === exercise.sportKey);
@@ -26,29 +25,3 @@ export default function ExerciseListItem({ exercise }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  sportIcon: {
-    width: 28,
-    height: 28,
-  },
-  content: {
-    flex: 1,
-  },
-  sportName: {
-    color: COLORS.text,
-    fontSize: 16,
-    fontFamily: FONTS.medium,
-  },
-  details: {
-    color: COLORS.text,
-    fontSize: 14,
-    fontFamily: FONTS.regular,
-    marginTop: 2,
-  },
-  date: {
-    color: COLORS.text,
-    fontSize: 13,
-    fontFamily: FONTS.regular,
-  },
-});
